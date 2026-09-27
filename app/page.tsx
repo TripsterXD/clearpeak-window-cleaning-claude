@@ -195,7 +195,7 @@ export default function HomePage() {
           <div className="lg:col-span-5">
             <SectionHeading
               eyebrow="The ClearPeak difference"
-              title="Why Calgary Chooses ClearPeak"
+              title="Why Calgarians Choose ClearPeak"
               intro="Good window cleaning comes down to doing the simple things well: showing up on time, working carefully and keeping you informed."
             />
             <div className="relative mt-10 hidden aspect-[4/3] overflow-hidden rounded-3xl shadow-soft lg:block">
