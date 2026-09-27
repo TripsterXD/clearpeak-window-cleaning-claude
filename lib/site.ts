@@ -1,5 +1,5 @@
 // Canonical production URL, used for canonical links, the sitemap and robots.txt.
-export const siteUrl = "https://clearpeakwindows.ca";
+export const siteUrl = "https://clearpeak-window-cleaning-claude.vercel.app";
 
 export const contact = {
   phone: "(403) 555-0148",
