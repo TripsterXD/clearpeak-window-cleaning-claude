@@ -1,30 +1,12 @@
 "use client";
 
 import { useRef, useState, type FormEvent } from "react";
+import { readQuoteInput, validateQuote, type QuoteErrors, type QuoteField } from "@/lib/quote";
 import { propertyTypeOptions, serviceTypeOptions } from "@/lib/site";
 import { CheckIcon } from "./icons";
 
-type FieldName = "name" | "email" | "phone" | "serviceType" | "propertyType" | "details";
-type Errors = Partial<Record<FieldName, string>>;
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-function validate(data: FormData): Errors {
-  const value = (field: FieldName) => String(data.get(field) ?? "").trim();
-  const errors: Errors = {};
-
-  if (!value("name")) errors.name = "Please enter your name.";
-  if (!value("email")) errors.email = "Please enter your email address.";
-  else if (!EMAIL_PATTERN.test(value("email")))
-    errors.email = "Please enter a valid email address.";
-  if (!value("phone")) errors.phone = "Please enter your phone number.";
-  else if (value("phone").replace(/\D/g, "").length < 10)
-    errors.phone = "Please enter a valid phone number, including area code.";
-  if (!value("serviceType")) errors.serviceType = "Please choose a service type.";
-  if (!value("propertyType")) errors.propertyType = "Please choose a property type.";
-
-  return errors;
-}
+const SUBMIT_ERROR =
+  "Sorry, we couldn’t send your request right now. Please try again, or call us instead.";
 
 const controlClass =
   "block w-full min-h-12 rounded-xl border bg-white px-4 py-3 text-base text-ink shadow-sm transition-colors placeholder:text-ink/40 focus:border-teal focus:ring-2 focus:ring-teal/30 focus:outline-none";
@@ -40,7 +22,7 @@ function Field({
   optional = false,
   children,
 }: {
-  id: FieldName;
+  id: QuoteField;
   label: string;
   error?: string;
   optional?: boolean;
@@ -64,28 +46,66 @@ function Field({
 
 export function QuoteForm() {
   const formRef = useRef<HTMLFormElement>(null);
-  const [errors, setErrors] = useState<Errors>({});
+  const [errors, setErrors] = useState<QuoteErrors>({});
   const [submittedName, setSubmittedName] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const submittingRef = useRef(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function focusFirstInvalid(fieldErrors: QuoteErrors) {
+    const firstInvalid = Object.keys(fieldErrors)[0];
+    if (firstInvalid) formRef.current?.querySelector<HTMLElement>(`#${firstInvalid}`)?.focus();
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const nextErrors = validate(data);
-    setErrors(nextErrors);
+    // Ignore repeat clicks or Enter presses while a request is in flight.
+    if (submittingRef.current) return;
 
-    const firstInvalid = Object.keys(nextErrors)[0];
-    if (firstInvalid) {
-      formRef.current?.querySelector<HTMLElement>(`#${firstInvalid}`)?.focus();
+    const form = event.currentTarget;
+    const input = readQuoteInput(new FormData(form));
+    const nextErrors = validateQuote(input);
+    setErrors(nextErrors);
+    setSubmitError(null);
+
+    if (Object.keys(nextErrors).length > 0) {
+      focusFirstInvalid(nextErrors);
       return;
     }
 
-    // Interface only for now: the request is not sent anywhere yet.
-    // Connect this to an API route or form service before launch.
-    setSubmittedName(String(data.get("name")).trim());
-    event.currentTarget.reset();
+    submittingRef.current = true;
+    setSubmitting(true);
+    try {
+      const response = await fetch("/api/quote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(input),
+      });
+      const result: { error?: string; errors?: QuoteErrors } = await response
+        .json()
+        .catch(() => ({}));
+
+      if (!response.ok) {
+        if (result.errors && Object.keys(result.errors).length > 0) {
+          setErrors(result.errors);
+          focusFirstInvalid(result.errors);
+        }
+        setSubmitError(result.error ?? SUBMIT_ERROR);
+        return;
+      }
+
+      form.reset();
+      setErrors({});
+      setSubmittedName(input.name);
+    } catch {
+      setSubmitError(SUBMIT_ERROR);
+    } finally {
+      submittingRef.current = false;
+      setSubmitting(false);
+    }
   }
 
-  const describedBy = (field: FieldName) => (errors[field] ? `${field}-error` : undefined);
+  const describedBy = (field: QuoteField) => (errors[field] ? `${field}-error` : undefined);
 
   if (submittedName) {
     return (
@@ -95,8 +115,8 @@ export function QuoteForm() {
         </span>
         <h3 className="mt-6 text-2xl font-bold">Thanks, {submittedName}!</h3>
         <p className="mx-auto mt-3 max-w-md leading-relaxed text-ink/75">
-          Thanks for reaching out about your windows. We’ll review your details and get back to
-          you soon with your free quote.
+          Your quote request has been sent. We’ll review your details and get back to you soon
+          with your free quote.
         </p>
         <button
           type="button"
@@ -110,7 +130,13 @@ export function QuoteForm() {
   }
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit} noValidate className="space-y-6">
+    <form
+      ref={formRef}
+      onSubmit={handleSubmit}
+      noValidate
+      aria-busy={submitting}
+      className="space-y-6"
+    >
       <div className="grid gap-6 sm:grid-cols-2">
         <div className="min-w-0 sm:col-span-2">
           <Field id="name" label="Name" error={errors.name}>
@@ -201,13 +227,20 @@ export function QuoteForm() {
         </div>
       </div>
 
+      {submitError && (
+        <p role="alert" className="text-sm font-medium text-red-700">
+          {submitError}
+        </p>
+      )}
+
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm text-ink/60">Free, no-obligation quote. No pressure, just clear pricing.</p>
         <button
           type="submit"
-          className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-full bg-teal px-8 py-3 text-base font-semibold text-navy shadow-soft transition-colors hover:bg-[#2bb294]"
+          disabled={submitting}
+          className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-full bg-teal px-8 py-3 text-base font-semibold text-navy shadow-soft transition-colors hover:bg-[#2bb294] disabled:cursor-not-allowed disabled:opacity-70"
         >
-          Request My Free Quote
+          {submitting ? "Sending…" : "Request My Free Quote"}
         </button>
       </div>
     </form>
