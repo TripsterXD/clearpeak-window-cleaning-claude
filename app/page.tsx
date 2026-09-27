@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -14,6 +15,13 @@ import { QuoteCta } from "@/components/quote-cta";
 import { ServiceIcon } from "@/components/service-icon";
 import { ButtonLink, CheckList, Container, SectionHeading } from "@/components/ui";
 import { contact, services } from "@/lib/site";
+
+export const metadata: Metadata = {
+  title: "Window Cleaning Calgary | ClearPeak Window Cleaning",
+  description:
+    "Professional residential and commercial window cleaning in Calgary. Request a free quote from ClearPeak Window Cleaning today.",
+  alternates: { canonical: "/" },
+};
 
 const reasons = [
   {
@@ -97,7 +105,7 @@ export default function HomePage() {
           <div className="relative aspect-[4/3] overflow-hidden rounded-3xl shadow-lift lg:aspect-[5/4]">
             <Image
               src="/images/hero-window-cleaning.jpg"
-              alt="ClearPeak window cleaner washing the exterior glass of a home"
+              alt="Professional window cleaner scrubbing the exterior glass of a house"
               fill
               preload
               sizes="(min-width: 1024px) 50vw, 100vw"

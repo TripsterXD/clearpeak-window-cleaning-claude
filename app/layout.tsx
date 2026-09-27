@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Manrope } from "next/font/google";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
+import { siteUrl } from "@/lib/site";
 import "./globals.css";
 
 const inter = Inter({
@@ -15,12 +16,10 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: {
-    default: "ClearPeak Window Cleaning | Calgary Window Cleaning",
-    template: "%s | ClearPeak Window Cleaning",
-  },
+  metadataBase: new URL(siteUrl),
+  title: "Window Cleaning Calgary | ClearPeak Window Cleaning",
   description:
-    "Professional residential and commercial window cleaning throughout Calgary and surrounding communities. Request a free quote from ClearPeak Window Cleaning.",
+    "Professional residential and commercial window cleaning in Calgary. Request a free quote from ClearPeak Window Cleaning today.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

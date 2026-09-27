@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
 import { ChevronDownIcon } from "@/components/icons";
 import { QuoteCta } from "@/components/quote-cta";
-import { ButtonLink, Container, PageHero } from "@/components/ui";
+import type { ReactNode } from "react";
+import { ButtonLink, Container, PageHero, TextLink } from "@/components/ui";
 import { contact } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Frequently Asked Questions",
+  title: "Window Cleaning FAQs | ClearPeak Calgary",
   description:
-    "Answers to common questions about window cleaning with ClearPeak in Calgary, including how often to clean, screens and tracks, appointments and quotes.",
+    "Find answers to common questions about window cleaning services, scheduling, screens, tracks, commercial cleaning and quotes in Calgary.",
+  alternates: { canonical: "/faq" },
 };
 
-const faqs = [
+const faqs: { question: string; answer: ReactNode }[] = [
   {
     question: "How often should I have my windows cleaned?",
     answer:
@@ -23,8 +25,15 @@ const faqs = [
   },
   {
     question: "Do you clean screens and tracks?",
-    answer:
-      "Yes. Screen, track and sill cleaning is available as an add-on to any window cleaning service. Screens are cleaned to remove dust and pollen, and tracks and sills are cleared of dirt and debris for a more complete finish.",
+    answer: (
+      <>
+        Yes.{" "}
+        <TextLink href="/services#screens-tracks-sills">Screen, track and sill cleaning</TextLink>{" "}
+        is available as an add-on to any window cleaning service. Screens are cleaned to remove
+        dust and pollen, and tracks and sills are cleared of dirt and debris for a more complete
+        finish.
+      </>
+    ),
   },
   {
     question: "Do I need to be home during the appointment?",
@@ -38,13 +47,25 @@ const faqs = [
   },
   {
     question: "Do you offer commercial window cleaning?",
-    answer:
-      "Yes. We provide light commercial window cleaning for storefronts, small offices and similar properties. We can set up one-time or recurring service and will do our best to schedule visits around your business hours.",
+    answer: (
+      <>
+        Yes. We provide{" "}
+        <TextLink href="/services#commercial">light commercial window cleaning</TextLink> for
+        storefronts, small offices and similar properties. We can set up one-time or recurring
+        service and will do our best to schedule visits around your business hours.
+      </>
+    ),
   },
   {
     question: "How do I get a quote?",
-    answer:
-      "Getting a quote is free and there’s no obligation. Fill out the quote form on our Contact page with a few details about your property and the services you’re interested in, or give us a call. We’ll follow up to confirm the details and provide your quote.",
+    answer: (
+      <>
+        Getting a quote is free and there’s no obligation. Fill out the{" "}
+        <TextLink href="/contact">quote form on our Contact page</TextLink> with a few details
+        about your property and the services you’re interested in, or give us a call. We’ll
+        follow up to confirm the details and provide your quote.
+      </>
+    ),
   },
 ];
 

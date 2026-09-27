@@ -7,9 +7,10 @@ import { ButtonLink, CheckList, Container, PageHero } from "@/components/ui";
 import { services } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Window Cleaning Services",
+  title: "Window Cleaning Services Calgary | ClearPeak",
   description:
-    "Residential window cleaning, commercial window cleaning, interior and exterior glass, and screen, track and sill cleaning in Calgary.",
+    "Explore residential, commercial, interior and exterior window cleaning services from ClearPeak Window Cleaning in Calgary.",
+  alternates: { canonical: "/services" },
 };
 
 export default function ServicesPage() {

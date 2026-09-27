@@ -1,3 +1,6 @@
+// Canonical production URL, used for canonical links, the sitemap and robots.txt.
+export const siteUrl = "https://clearpeakwindows.ca";
+
 export const contact = {
   phone: "(403) 555-0148",
   phoneHref: "tel:+14035550148",

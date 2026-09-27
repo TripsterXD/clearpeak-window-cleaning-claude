@@ -7,12 +7,13 @@ import {
   SparkleIcon,
 } from "@/components/icons";
 import { QuoteCta } from "@/components/quote-cta";
-import { CheckList, Container, PageHero, SectionHeading } from "@/components/ui";
+import { CheckList, Container, PageHero, SectionHeading, TextLink } from "@/components/ui";
 
 export const metadata: Metadata = {
-  title: "About Us",
+  title: "About ClearPeak Window Cleaning | Calgary, AB",
   description:
-    "ClearPeak Window Cleaning offers straightforward service, careful work, dependable scheduling and clear communication for Calgary homes and businesses.",
+    "Learn about ClearPeak Window Cleaning and our straightforward approach to residential and commercial window cleaning in Calgary.",
+  alternates: { canonical: "/about" },
 };
 
 const values = [
@@ -62,8 +63,10 @@ export default function AboutPage() {
               </p>
               <p>
                 That’s why ClearPeak keeps things straightforward. We listen to what you need,
-                recommend the right service for your property and handle the work with care, so
-                you can enjoy a clearer view and more of your free time.
+                recommend the right{" "}
+                <TextLink href="/services">window cleaning service</TextLink>{" "}
+                for your property and handle the work with care, so you can enjoy a clearer view
+                and more of your free time.
               </p>
             </div>
             <div className="mt-8">

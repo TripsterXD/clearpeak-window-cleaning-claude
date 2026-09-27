@@ -44,6 +44,20 @@ export function ButtonLink({
   );
 }
 
+export function TextLink({
+  light = false,
+  ...props
+}: ComponentProps<typeof Link> & { light?: boolean }) {
+  return (
+    <Link
+      className={`font-semibold underline underline-offset-4 ${
+        light ? "text-teal hover:text-white" : "text-teal-dark hover:text-navy"
+      }`}
+      {...props}
+    />
+  );
+}
+
 export function Eyebrow({
   children,
   light = false,
