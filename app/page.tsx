@@ -123,19 +123,19 @@ export default function HomePage() {
             <SectionHeading
               eyebrow="Why hire a pro"
               title="Calgary Window Cleaning Made Simple"
-              intro="Between prairie dust, spring rain, chinooks and long winters, Calgary windows work hard. Cleaning them yourself means hauling ladders, juggling buckets and chasing streaks that show up the moment the sun hits the glass."
+              intro="Clean glass lets in more daylight, sharpens the view and makes a whole property feel better cared for. Getting there on your own, though, usually means a lost Saturday, a wobbly ladder and a hazy film that never quite comes off."
             />
             <p className="mt-4 text-lg leading-relaxed text-ink/75">
-              ClearPeak takes that job off your list. We bring the right equipment, clean
-              carefully and leave your windows looking clear and bright, so you can spend your
-              time on the things you actually enjoy.
+              Handing the job to ClearPeak is the easier route. Tell us what you’d like done,
+              choose a time that suits you and we’ll look after the rest, returning your glass to
+              a crisp, clear finish while your day stays your own.
             </p>
             <div className="mt-8">
               <CheckList
                 items={[
-                  "Straightforward, free quotes with no pressure",
-                  "Service tailored to your property and schedule",
-                  "Homes, storefronts and light commercial properties",
+                  "A clear, no-cost quote before any work begins",
+                  "Visits planned around your routine, not ours",
+                  "Suited to houses, shopfronts and smaller commercial spaces",
                 ]}
               />
             </div>
