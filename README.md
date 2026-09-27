@@ -57,4 +57,17 @@ Headings use Manrope (`font-heading`); body text uses Inter.
 
 ## Quote form
 
-The quote form is **interface only** in this version. It validates input and shows a confirmation message, but the request is not sent anywhere yet. Before launch, connect `handleSubmit` in `components/quote-form.tsx` to an API route or form service.
+The Contact page quote form posts to a server-side route handler at `app/api/quote/route.ts`, which validates the submission and saves it to the Supabase `quote_submissions` table. Validation rules live in `lib/quote.ts` and are shared by the form and the route.
+
+The Supabase connection is configured with environment variables (see `.env.example`):
+
+```bash
+cp .env.example .env.local
+```
+
+| Variable                    | Description                                   |
+| --------------------------- | --------------------------------------------- |
+| `SUPABASE_URL`              | Your Supabase project URL                     |
+| `SUPABASE_SERVICE_ROLE_KEY` | Service-role key, used **only** on the server |
+
+The service-role key is read only in `lib/supabase-server.ts`, which is imported only by the API route. Never prefix these variables with `NEXT_PUBLIC_`, as that would expose them to the browser. Set the same variables in your hosting provider's environment settings when deploying.
