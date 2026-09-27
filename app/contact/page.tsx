@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { ClockIcon, MailIcon, MapPinIcon, PhoneIcon } from "@/components/icons";
 import { QuoteForm } from "@/components/quote-form";
-import { Container, PageHero } from "@/components/ui";
+import { Container, PageHero, TextLink } from "@/components/ui";
 import { contact } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Contact Us for a Free Quote",
+  title: "Get a Window Cleaning Quote Calgary | ClearPeak",
   description:
-    "Request a free window cleaning quote from ClearPeak. Serving Calgary and surrounding communities. Call (403) 555-0148 or send us your project details.",
+    "Request a free window cleaning quote from ClearPeak Window Cleaning for residential or light commercial service in Calgary.",
+  alternates: { canonical: "/contact" },
 };
 
 const details = [
@@ -40,7 +41,14 @@ export default function ContactPage() {
           <div className="min-w-0 space-y-6 lg:col-span-5">
             <div className="rounded-3xl bg-navy p-6 text-white shadow-soft sm:p-8">
               <h2 className="text-2xl font-bold text-white">Contact Information</h2>
-              <p className="mt-2 text-white/75">Prefer to talk? Give us a call or send an email.</p>
+              <p className="mt-2 text-white/75">
+                Prefer to talk? Give us a call or send an email. You can also find quick answers
+                in our{" "}
+                <TextLink href="/faq" light>
+                  window cleaning FAQ
+                </TextLink>
+                .
+              </p>
               <ul className="mt-8 space-y-6">
                 {details.map(({ icon: Icon, label, value, href }) => (
                   <li key={label} className="flex gap-4">
